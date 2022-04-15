@@ -5,6 +5,7 @@
     transition: margin-left .28s;
     margin-left: $sideBarWidth;
     position: relative;
+    
   }
 
   .sidebar-container {
@@ -19,7 +20,7 @@
     left: 0;
     z-index: 1001;
     overflow: hidden;
-
+    background: -webkit-linear-gradient(bottom, #3d6df8, #5b8cff);
     // reset element-ui css
     .horizontal-collapse-transition {
       transition: 0s width ease-in-out, 0s padding-left ease-in-out, 0s padding-right ease-in-out;
@@ -27,7 +28,10 @@
 
     .scrollbar-wrapper {
       overflow-x: hidden !important;
+      background: url('~@/assets/common/leftnavBg.png') no-repeat 0 100%;
     }
+    
+    
 
     .el-scrollbar__bar.is-vertical {
       right: 0px;
@@ -66,6 +70,29 @@
       border: none;
       height: 100%;
       width: 100% !important;
+      a{
+        li{
+          .svg-icon{
+            color: #fff;
+            font-size: 18px;
+            vertical-align: middle;
+            .icon{
+              color:#fff;
+            }
+          }
+          span{
+            color: #fff;
+          }
+          &:hover{
+            .svg-icon{
+              color: #43a7fe
+            }
+            span{
+              color: #43a7fe;
+            }
+          }
+        }
+      }
     }
 
     // menu hover

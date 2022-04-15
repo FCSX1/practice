@@ -1,90 +1,60 @@
-import { login, logout, getInfo } from '@/api/user'
-import { getToken, setToken, removeToken } from '@/utils/auth'
+import { getToken, setToken, removeToken, setTimeStamp } from '@/utils/auth'
+
+import { login, getUserInfo, getUserId } from '@/api/user'
+
 import { resetRouter } from '@/router'
 
-const getDefaultState = () => {
-  return {
-    token: getToken(),
-    name: '',
-    avatar: ''
-  }
+// 数据
+const state = {
+  // 共享token
+  token: getToken(),
+  userInfo: {}
 }
 
-const state = getDefaultState()
-
 const mutations = {
-  RESET_STATE: (state) => {
-    Object.assign(state, getDefaultState())
+  setToken(state, token) {
+    state.token = token // 将token存入vuex
+    setToken(token) // 同步缓存
   },
-  SET_TOKEN: (state, token) => {
-    state.token = token
+  removeToken(state) {
+    state.token = null // 将vuex的数据清空
+    removeToken()
   },
-  SET_NAME: (state, name) => {
-    state.name = name
+  setUserInfo(state, result) {
+    state.userInfo = result
   },
-  SET_AVATAR: (state, avatar) => {
-    state.avatar = avatar
+  removeUserInfo(state) {
+    state.userInfo = {}
   }
 }
 
 const actions = {
-  // user login
-  login({ commit }, userInfo) {
-    const { username, password } = userInfo
-    return new Promise((resolve, reject) => {
-      login({ username: username.trim(), password: password }).then(response => {
-        const { data } = response
-        commit('SET_TOKEN', data.token)
-        setToken(data.token)
-        resolve()
-      }).catch(error => {
-        reject(error)
-      })
-    })
+  async login(context, data) {
+    // 调用api接口
+    // 拿到token
+    const result = await login(data)
+    // 设置token
+    context.commit('setToken', result)
+    setTimeStamp() // 设置当前时间戳
   },
-
-  // get user info
-  getInfo({ commit, state }) {
-    return new Promise((resolve, reject) => {
-      getInfo(state.token).then(response => {
-        const { data } = response
-
-        if (!data) {
-          return reject('Verification failed, please Login again.')
-        }
-
-        const { name, avatar } = data
-
-        commit('SET_NAME', name)
-        commit('SET_AVATAR', avatar)
-        resolve(data)
-      }).catch(error => {
-        reject(error)
-      })
-    })
+  async getUserInfo(context) {
+    const result = await getUserInfo()
+    // 获取用户的详情  用户详情的数据
+    const baseInfo = await getUserId(result.userId)
+    // 提交到mutations
+    context.commit('setUersInfo', ...result, ...baseInfo)
+    return result
   },
-
-  // user logout
-  logout({ commit, state }) {
-    return new Promise((resolve, reject) => {
-      logout(state.token).then(() => {
-        removeToken() // must remove  token  first
-        resetRouter()
-        commit('RESET_STATE')
-        resolve()
-      }).catch(error => {
-        reject(error)
-      })
-    })
-  },
-
-  // remove token
-  resetToken({ commit }) {
-    return new Promise(resolve => {
-      removeToken() // must remove  token  first
-      commit('RESET_STATE')
-      resolve()
-    })
+  // 登出
+  logout(context) {
+    // 删除token
+    context.commit('removeToken')
+    // 删除用户资料
+    context.commit('removeUserInfo')
+    // 重置路由
+    resetRouter()
+    // 去设置权限模块下路由为初始状态
+    context.commit('permission/setRoutes', [], { root: true })
   }
 }
 
@@ -94,4 +64,3 @@ export default {
   mutations,
   actions
 }
-
