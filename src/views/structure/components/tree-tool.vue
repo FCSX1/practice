@@ -23,6 +23,7 @@
             <!-- 具名插槽 -->
 
             <el-dropdown-menu slot="dropdown">
+
               <el-dropdown-item command="add">
                 添加子部门
               </el-dropdown-item>
@@ -35,9 +36,8 @@
               <el-dropdown-item
                 v-if="!isRoot"
                 command="del"
-              >
-                删除部门
-              </el-dropdown-item>
+              >删除部门</el-dropdown-item>
+
             </el-dropdown-menu>
           </el-dropdown>
         </el-col>

@@ -16,25 +16,27 @@ export function deleteDepartment(id) {
 }
 
 // 新增部门
-export function addDepartment() {
+export function addDepartment(data) {
   return request({
     url: '/company/department',
-    method: 'POST'
+    method: 'POST',
+    data
   })
 }
 
 // 获取某个部门的详情
 export function gainDepartment(id) {
   return request({
-    url: `/company/department${id}`
+    url: `/company/department/${id}`
   })
 }
 
 // 保存编辑的数据
-export function updateDepartment(id) {
+export function updateDepartment(data) {
   return request({
-    url: `/company/department/${id}`,
-    method: 'PUT'
+    url: `/company/department/${data.id}`,
+    method: 'PUT',
+    data
   })
 }
 
