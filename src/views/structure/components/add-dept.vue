@@ -71,21 +71,22 @@
       </el-form-item>
     </el-form>
     <!-- 确认和取消 -->
-
-    <el-row slot="footer" type="flex" justify="center">
-      <el-col :span="6">
-        <el-button
-          size="small"
-          type="primary"
-          @click="btnCancel"
-        >取消</el-button>
-        <el-button
-          size="small"
-          type="primary"
-          @click="btnOK"
-        >确认</el-button>
-      </el-col>
-    </el-row>
+    <template #footer>
+      <el-row type="flex" justify="center">
+        <el-col :span="6">
+          <el-button
+            size="small"
+            type="primary"
+            @click="btnCancel"
+          >取消</el-button>
+          <el-button
+            size="small"
+            type="primary"
+            @click="btnOK"
+          >确认</el-button>
+        </el-col>
+      </el-row>
+    </template>
 
   </el-dialog>
 </template>

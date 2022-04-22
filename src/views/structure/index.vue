@@ -2,26 +2,33 @@
   <div class="dashboard-container">
     <div class="app-container">
       <!-- 组织架构内容-头部 -->
-      <el-card class="tree-card">
-        <!-- 放置结构内容 -->
-        <tree-tool
-          :tree-node="company"
-          :is-root="true"
-          @addDepts="addDepts"
-        />
+      <template>
 
-        <el-tree :data="departs" :props="defaultProps" :default-expand-all="true">
-          <!-- 传入内容 插槽内容 会循环多次 有多少节点 就循环多少次 -->
-          <!-- 作用域插槽 slot-scope='obj' 接收传递给插槽的数据 data 是每个节点的数据对象 -->
+        <el-card class="tree-card">
+          <!-- 放置结构内容 -->
+
           <tree-tool
-            slot-scope="{ data }"
-            :tree-node="data"
+            :tree-node="company"
+            :is-root="true"
             @addDepts="addDepts"
-            @editDepts="editDepts"
-            @delDepts="getDepartment"
           />
-        </el-tree>
-      </el-card>
+
+          <el-tree v-slot="{data}" :data="departs" :props="defaultProps" :default-expand-all="true">
+            <!-- 传入内容 插槽内容 会循环多次 有多少节点 就循环多少次 -->
+            <!-- 作用域插槽 slot-scope='obj' 接收传递给插槽的数据 data 是每个节点的数据对象 -->
+            <!-- slot-scope="{ data }" -->
+            <!-- <template v-slot="{data}"> -->
+            <tree-tool
+              :tree-node="data"
+              @addDepts="addDepts"
+              @editDepts="editDepts"
+              @delDepts="getDepartment"
+            />
+            <!-- </template> -->
+          </el-tree>
+
+        </el-card>
+      </template>
     </div>
     <add-dept
       ref="addDept"
